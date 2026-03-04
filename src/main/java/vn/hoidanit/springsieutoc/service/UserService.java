@@ -1,6 +1,7 @@
 package vn.hoidanit.springsieutoc.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,10 @@ public class UserService {
         return this.userRepository.findByEmail(email);
     }
 
+    public User getUserById(long id) {
+        return this.userRepository.findById(id);
+    }
+
     public String handlHello() {
         return "Hello from service :>";
     }
@@ -31,6 +36,10 @@ public class UserService {
         User kabeo = this.userRepository.save(user);
         System.out.println(kabeo);
         return kabeo;
+    }
+
+    public void deleteAUser(long id) {
+        this.userRepository.deleteById(id);
     }
 
 }
