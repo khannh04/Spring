@@ -15,85 +15,10 @@
         </head>
 
         <body class="sb-nav-fixed">
-            <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <jsp:include page="../layout/header.jsp" />
 
-                <!-- Logo -->
-                <a class="navbar-brand ps-3" href="index.html">LaptopShop</a>
-
-                <!-- Toggle sidebar -->
-                <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-
-                <!-- Đẩy sang phải -->
-                <div class="ms-auto d-flex align-items-center">
-
-                    <span class="text-white me-3">Welcome, khanhnguyxn</span>
-
-                    <!-- User dropdown -->
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                                data-bs-toggle="dropdown">
-                                <i class="fas fa-user fa-fw"></i>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li><a class="dropdown-item" href="#">Activity Log</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
-                            </ul>
-
-                        </li>
-                    </ul>
-
-                </div>
-
-            </nav>
             <div id="layoutSidenav">
-                <div id="layoutSidenav_nav">
-                    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                        <div class="sb-sidenav-menu">
-                            <div class="nav">
-                                <div class="sb-sidenav-menu-heading">Features</div>
-
-                                <a class="nav-link" href="index.html">
-                                    <div class="sb-nav-link-icon">
-                                        <i class="fas fa-tachometer-alt"></i>
-                                    </div>
-                                    Dashboard
-                                </a>
-
-                                <a class="nav-link" href="#">
-                                    <div class="sb-nav-link-icon">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                    User
-                                </a>
-
-                                <a class="nav-link" href="#">
-                                    <div class="sb-nav-link-icon">
-                                        <i class="fas fa-laptop"></i>
-                                    </div>
-                                    Product
-                                </a>
-
-                                <a class="nav-link" href="#">
-                                    <div class="sb-nav-link-icon">
-                                        <i class="fas fa-shopping-cart"></i>
-                                    </div>
-                                    Order
-                                </a>
-
-                                <div class="sb-sidenav-footer">
-                                    <div class="small">Logged in as:</div>
-                                    khanhnguyxn
-                                </div>
-                    </nav>
-                </div>
+                <jsp:include page="../layout/sidebar.jsp" />
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid px-4">
@@ -651,18 +576,7 @@
                             </div>
                         </div>
                     </main>
-                    <footer class="py-4 bg-light mt-auto">
-                        <div class="container-fluid px-4">
-                            <div class="d-flex align-items-center justify-content-between small">
-                                <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                                <div>
-                                    <a href="#">Privacy Policy</a>
-                                    &middot;
-                                    <a href="#">Terms &amp; Conditions</a>
-                                </div>
-                            </div>
-                        </div>
-                    </footer>
+                    <jsp:include page="../layout/footer.jsp" />
                 </div>
             </div>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
