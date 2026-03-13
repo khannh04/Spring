@@ -2,7 +2,6 @@ package vn.hoidanit.springsieutoc.controller.admin;
 
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,14 +32,14 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @RequestMapping("/")
-    public String getHomePage(Model model) {
+    // @GetMapping("/")
+    // public String getHomePage(Model model) {
 
-        String test = this.userService.handlHello();
-        model.addAttribute("khanh", test);
-        model.addAttribute("kabeo", "from controller with model");
-        return "hello";
-    }
+    // String test = this.userService.handlHello();
+    // model.addAttribute("khanh", test);
+    // model.addAttribute("kabeo", "from controller with model");
+    // return "hello";
+    // }
 
     @GetMapping("/admin/user/create")
     public String getCreateUserPage(Model model) {
