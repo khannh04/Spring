@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,8 @@ import vn.hoidanit.springsieutoc.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class UserController {
@@ -48,8 +52,18 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/create")
-    public String createUserPage(Model model, @ModelAttribute("newUser") User khanh,
+    public String createUserPage(Model model, @ModelAttribute("newUser") @Valid User khanh,
+            BindingResult newUserBindingResult,
             @RequestParam("khanhFile") MultipartFile file) {
+        List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(">>>>" + error.getField() + " - " + error.getDefaultMessage());
+        }
+
+        // validate
+        if (newUserBindingResult.hasErrors()) {
+            return "admin/user/create";
+        }
 
         String avatar = this.uploadService.handlSaveUploadFile(file, "avatar");
         String hashPassword = this.passwordEncoder.encode(khanh.getPassword());
@@ -58,7 +72,7 @@ public class UserController {
         khanh.setRole(this.userService.getRoleByName(khanh.getRole().getName()));
 
         // save
-        this.userService.handlSaveUser(khanh);
+        this.userService.handleSaveUser(khanh);
         return "redirect:/admin/user";
     }
 
@@ -92,7 +106,7 @@ public class UserController {
             currentUser.setFullName(khanh.getFullName());
             currentUser.setPhone(khanh.getPhone());
 
-            this.userService.handlSaveUser(currentUser);
+            this.userService.handleSaveUser(currentUser);
         }
         return "redirect:/admin/user";
     }

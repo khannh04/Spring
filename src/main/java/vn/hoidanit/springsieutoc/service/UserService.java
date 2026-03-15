@@ -36,7 +36,7 @@ public class UserService {
         return "Hello from service :>";
     }
 
-    public User handlSaveUser(User user) {
+    public User handleSaveUser(User user) {
         User kabeo = this.userRepository.save(user);
         System.out.println(kabeo);
         return kabeo;
