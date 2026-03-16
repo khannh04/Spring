@@ -53,7 +53,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <c:forEach var="product" items="${products1}">
+                                                    <c:forEach var="product" items="${products}">
 
                                                         <tr>
                                                             <th>${product.id}</th>
@@ -61,11 +61,11 @@
                                                             <th>${product.price}</th>
                                                             <th>${product.factory}</th>
                                                             <th>
-                                                                <a href="/admin/user/${user.id}"
+                                                                <a href="/admin/product/${product.id}"
                                                                     class="btn btn-success">View</a>
-                                                                <a href="/admin/user/update/${user.id}"
+                                                                <a href="/admin/product/update/${product.id}"
                                                                     class="btn btn-warning">Update</a>
-                                                                <a href="/admin/user/delete/${user.id}"
+                                                                <a href="/admin/product/delete/${product.id}"
                                                                     class="btn btn-danger">Delete</a>
                                                             </th>
                                                         </tr>
@@ -73,7 +73,6 @@
 
                                                 </tbody>
                                             </table>
-
                                         </div>
                                     </div>
                                 </div>
@@ -84,7 +83,7 @@
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                     crossorigin="anonymous"></script>
-                <script src="js/scripts.js"></script>
+                <script src="/js/scripts.js"></script>
             </body>
 
             </html>

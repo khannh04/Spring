@@ -2,12 +2,16 @@ package vn.hoidanit.springsieutoc.domain;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "products")
@@ -16,11 +20,21 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotEmpty(message = "Product name can not be null")
     private String name;
+
+    @Min(value = 1, message = "Price must be greater than 0")
     private double price;
     private String image;
+
+    @NotEmpty(message = "detailDesc can not be null")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String detailDesc;
+
+    @NotEmpty(message = "shortDesc can not be null")
     private String shortDesc;
+
+    @Min(value = 1, message = "Price must be greater than 0")
     private long quantity;
     private long sold;
     private String factory;

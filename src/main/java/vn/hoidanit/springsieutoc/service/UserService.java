@@ -7,6 +7,7 @@ import vn.hoidanit.springsieutoc.domain.Role;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.springsieutoc.domain.User;
+import vn.hoidanit.springsieutoc.domain.dto.RegisterDTO;
 import vn.hoidanit.springsieutoc.repository.RoleRepository;
 import vn.hoidanit.springsieutoc.repository.UserRepository;
 
@@ -50,4 +51,17 @@ public class UserService {
         return this.roleRepository.findByName(name);
     }
 
+    public User regiterDTOtoUser(RegisterDTO registerDTO) {
+        User user = new User();
+
+        user.setFullName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
+        user.setEmail(registerDTO.getEmail());
+        user.setPassword(registerDTO.getPassword());
+
+        return user;
+    }
+
+    public boolean checkEmailExist(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
 }

@@ -55,10 +55,11 @@ public class UserController {
     public String createUserPage(Model model, @ModelAttribute("newUser") @Valid User khanh,
             BindingResult newUserBindingResult,
             @RequestParam("khanhFile") MultipartFile file) {
-        List<FieldError> errors = newUserBindingResult.getFieldErrors();
-        for (FieldError error : errors) {
-            System.out.println(">>>>" + error.getField() + " - " + error.getDefaultMessage());
-        }
+        // List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        // for (FieldError error : errors) {
+        // System.out.println(">>>>" + error.getField() + " - " +
+        // error.getDefaultMessage());
+        // }
 
         // validate
         if (newUserBindingResult.hasErrors()) {
@@ -79,12 +80,12 @@ public class UserController {
     @GetMapping("/admin/user")
     public String getUserPage(Model model) {
         List<User> users = this.userService.getAllUsers();
-        model.addAttribute("users1", users);
+        model.addAttribute("users", users);
         return "admin/user/show";
     }
 
     @GetMapping("/admin/user/{id}")
-    public String getUserDetailPage(Model model, @PathVariable long id) {
+    public String postUserDetail(Model model, @PathVariable long id) {
         User user = this.userService.getUserById(id);
         model.addAttribute("user", user);
         model.addAttribute("id", id);

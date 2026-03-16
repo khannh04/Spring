@@ -27,4 +27,12 @@ public class ProductService {
         return this.productRepository.save(product);
     }
 
+    public void deleteAProduct(long id) {
+        this.productRepository.deleteById(id);
+    }
+
+    public List<Product> getALlProducts() {
+        return this.productRepository.findAll();
+    }
+
 }

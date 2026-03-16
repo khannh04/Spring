@@ -10,14 +10,20 @@
                     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     <meta name="description" content="khanhnguyxn - Demo LaptopShop" />
                     <meta name="author" content="khanhnguyxn" />
-                    <title>Create Product - Khannh</title>
+                    <title>Update Product - Khannh</title>
                     <link href="/css/styles.css" rel="stylesheet" />
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
                     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
                         crossorigin="anonymous"></script>
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
                     <script>
                         $(document).ready(() => {
                             const avatarFile = $("#khanhFile");
+                            const orgImage = "${newProduct.image}";
+                            if (orgImage) {
+                                const urlImage = "/images/product/" + orgImage;
+                                $("#productPreview").attr("src", urlImage);
+                                $("#productPreview").css({ "display": "block" });
+                            }
                             avatarFile.change(function (e) {
                                 const imgURL = URL.createObjectURL(e.target.files[0]);
                                 $("#productPreview").attr("src", imgURL);
@@ -29,25 +35,25 @@
 
                 <body class="sb-nav-fixed">
                     <jsp:include page="../layout/header.jsp" />
-
                     <div id="layoutSidenav">
                         <jsp:include page="../layout/sidebar.jsp" />
                         <div id="layoutSidenav_content">
                             <main>
                                 <div class="container-fluid px-4">
-                                    <h1 class="mt-4">Products</h1>
+                                    <h1 class="mt-4">Manage Product</h1>
                                     <ol class="breadcrumb mb-4">
                                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                                         <li class="breadcrumb-item"><a href="/admin/product">Products</a></li>
-                                        <li class="breadcrumb-item active">Create</li>
+                                        <li class="breadcrumb-item active">Update</li>
                                     </ol>
                                     <div class=" mt-5">
                                         <div class="row">
                                             <div class="col-md-6 col-12 mx-auto">
-                                                <h3>Create a product</h3>
+                                                <h3>Update a Product</h3>
                                                 <hr />
-                                                <form:form class="row g-3" method="post" action="/admin/product/create"
+                                                <form:form class="row g-3" method="post" action="/admin/product/update"
                                                     modelAttribute="newProduct" enctype="multipart/form-data">
+                                                    <form:input type="hidden" path="id" />
                                                     <spring:bind path="name">
                                                         <div class="col-md-6">
                                                             <label class="form-label">Name:</label>
@@ -130,7 +136,7 @@
                                                             alt="product preview" id="productPreview">
                                                     </div>
                                                     <div class="col-12 mb-5">
-                                                        <button type="submit" class="btn btn-primary">Create</button>
+                                                        <button type="submit" class="btn btn-primary">Update</button>
                                                     </div>
                                                 </form:form>
                                             </div>
