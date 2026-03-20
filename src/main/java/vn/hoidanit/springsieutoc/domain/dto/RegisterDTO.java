@@ -1,15 +1,21 @@
 package vn.hoidanit.springsieutoc.domain.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import vn.hoidanit.springsieutoc.service.validator.RegisterChecker;
 import vn.hoidanit.springsieutoc.service.validator.StrongPassword;
 
 @RegisterChecker
 public class RegisterDTO {
+    @Size(min = 2, message = "First name must be at least 3 characters")
     private String firstName;
     private String lastName;
+
+    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
 
     // @StrongPassword
+    @Size(min = 2, message = "Password must be at least 3 characters")
     private String password;
     private String confirmPassword;
 

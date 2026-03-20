@@ -53,13 +53,17 @@
                                                             modelAttribute="registerUser">
                                                             <div class="row mb-3">
                                                                 <div class="col-md-6">
-                                                                    <div class="form-floating mb-3 mb-md-0">
-                                                                        <form:input path="firstName"
-                                                                            class="form-control" id="inputFirstName"
-                                                                            type="text"
-                                                                            placeholder="Enter your first name" />
-                                                                        <label for="inputFirstName">First name</label>
-                                                                    </div>
+                                                                    <spring:bind path="firstName">
+                                                                        <div class="form-floating mb-3 mb-md-0">
+                                                                            <form:input path="firstName"
+                                                                                cssClass="form-control ${status.error ? 'is-invalid' : ''}"
+                                                                                type="text"
+                                                                                placeholder="Enter your first name" />
+                                                                            <label>First name</label>
+                                                                            <form:errors path="firstName"
+                                                                                cssClass="invalid-feedback" />
+                                                                        </div>
+                                                                    </spring:bind>
                                                                 </div>
                                                                 <div class="col-md-6">
                                                                     <div class="form-floating">
@@ -72,12 +76,10 @@
                                                             </div>
                                                             <spring:bind path="email">
                                                                 <div class="form-floating mb-3">
-                                                                    <form:input path="email" id="inputEmail"
-                                                                        type="email" placeholder="name@example.com"
+                                                                    <form:input path="email" type="email"
+                                                                        placeholder="name@example.com"
                                                                         cssClass="form-control ${status.error ? 'is-invalid' : ''}" />
-
-                                                                    <label for="inputEmail">Email address</label>
-
+                                                                    <label>Email address</label>
                                                                     <form:errors path="email"
                                                                         cssClass="invalid-feedback" />
                                                                 </div>
@@ -121,7 +123,7 @@
                                                         </form:form>
                                                     </div>
                                                     <div class="card-footer text-center py-3">
-                                                        <div class="small"><a href="login.html">Have an account? Go to
+                                                        <div class="small"><a href="/login">Have an account? Go to
                                                                 login</a></div>
                                                     </div>
                                                 </div>
