@@ -129,4 +129,12 @@ public class User {
                 + ", address=" + address + ", phone=" + phone + ", avatar=" + avatar + "]";
     }
 
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
 }
