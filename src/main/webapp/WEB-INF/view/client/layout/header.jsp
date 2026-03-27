@@ -12,7 +12,7 @@
                 </button>
                 <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                     <div class="navbar-nav mx-auto">
-                        <a href="index.html" class="nav-item nav-link active">Home</a>
+                        <a href="/" class="nav-item nav-link active">Home</a>
                         <a href="shop.html" class="nav-item nav-link">Product</a>
                     </div>
                     <div class="d-flex m-3 me-0">
