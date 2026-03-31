@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.annotations.ManyToAny;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +26,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
 
     private double totalPrice;
@@ -47,7 +48,7 @@ public class Order {
     }
 
     public List<OrderDetail> getOrderDetails() {
-        return orderDetails;
+        return this.orderDetails;
     }
 
     public void setOrderDetails(List<OrderDetail> orderDetails) {
@@ -74,7 +75,7 @@ public class Order {
         return receiverPhone;
     }
 
-    public void setRecieverPhone(String receiverPhone) {
+    public void setReceiverPhone(String receiverPhone) {
         this.receiverPhone = receiverPhone;
     }
 
@@ -104,7 +105,9 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order [id=" + id + ", totalPrice=" + totalPrice + "]";
+        return "Order [id=" + id + ", user=" + user + ", orderDetails=" + orderDetails + ", totalPrice=" + totalPrice
+                + ", receiverName=" + receiverName + ", receiverAddress=" + receiverAddress + ", receiverPhone="
+                + receiverPhone + ", status=" + status + "]";
     }
 
 }

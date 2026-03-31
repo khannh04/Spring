@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import vn.hoidanit.springsieutoc.domain.User;
 import vn.hoidanit.springsieutoc.domain.dto.RegisterDTO;
+import vn.hoidanit.springsieutoc.repository.OrderRepository;
+import vn.hoidanit.springsieutoc.repository.ProductRepository;
 import vn.hoidanit.springsieutoc.repository.RoleRepository;
 import vn.hoidanit.springsieutoc.repository.UserRepository;
 
@@ -15,10 +17,15 @@ import vn.hoidanit.springsieutoc.repository.UserRepository;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository,
+            ProductRepository productRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
     }
 
     public List<User> getAllUsers() {
@@ -67,5 +74,17 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return this.userRepository.findByEmail(email);
+    }
+
+    public long countUsers() {
+        return this.userRepository.count();
+    }
+
+    public long countProducts() {
+        return this.productRepository.count();
+    }
+
+    public long countOrders() {
+        return this.orderRepository.count();
     }
 }

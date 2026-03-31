@@ -22,14 +22,20 @@ public class Cart {
     @Min(value = 0)
     private int sum;
 
-    // user_id
     @OneToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
-    // cart_detail_id
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @OneToMany(mappedBy = "cart")
-    List<CartDetail> cartDetails;
+    List<CartDetail> CartDetails;
 
     public long getId() {
         return id;
@@ -47,25 +53,12 @@ public class Cart {
         this.sum = sum;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public List<CartDetail> getCartDetails() {
-        return cartDetails;
+        return CartDetails;
     }
 
     public void setCartDetails(List<CartDetail> cartDetails) {
-        this.cartDetails = cartDetails;
-    }
-
-    @Override
-    public String toString() {
-        return "Cart [id=" + id + ", sum=" + sum + ", user=" + user + ", cartDetails=" + cartDetails + "]";
+        CartDetails = cartDetails;
     }
 
 }

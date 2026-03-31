@@ -16,15 +16,27 @@ public class CartDetail {
     private long id;
 
     private long quantity;
-
     private double price;
-
-    // cart_id :long
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    // product_id
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
@@ -52,27 +64,4 @@ public class CartDetail {
     public void setPrice(double price) {
         this.price = price;
     }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    @Override
-    public String toString() {
-        return "CartDetail [id=" + id + ", quantity=" + quantity + ", price=" + price + ", cart=" + cart + ", product="
-                + product + "]";
-    }
-
 }
