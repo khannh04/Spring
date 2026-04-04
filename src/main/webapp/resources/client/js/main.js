@@ -143,58 +143,82 @@
     });
 
 
-    $('.quantity button').on('click', function () {
-        var button = $(this);
-        var input = button.parent().parent().find('input');
-        var oldValue = parseFloat(input.val()) || 1;
-        var newVal;
 
-        // Tính toán số lượng mới
+
+    // Product Quantity
+    // $('.quantity button').on('click', function () {
+    //     var button = $(this);
+    //     var oldValue = button.parent().parent().find('input').val();
+    //     if (button.hasClass('btn-plus')) {
+    //         var newVal = parseFloat(oldValue) + 1;
+    //     } else {
+    //         if (oldValue > 0) {
+    //             var newVal = parseFloat(oldValue) - 1;
+    //         } else {
+    //             newVal = 0;
+    //         }
+    //     }
+    //     button.parent().parent().find('input').val(newVal);
+    // });
+    $('.quantity button').on('click', function () {
+        let change = 0;
+
+        var button = $(this);
+        var oldValue = button.parent().parent().find('input').val();
         if (button.hasClass('btn-plus')) {
-            newVal = oldValue + 1;
+            var newVal = parseFloat(oldValue) + 1;
+            change = 1;
         } else {
-            newVal = (oldValue > 1) ? oldValue - 1 : 1;
+            if (oldValue > 1) {
+                var newVal = parseFloat(oldValue) - 1;
+                change = -1;
+            } else {
+                newVal = 1;
+            }
         }
+        const input = button.parent().parent().find('input');
         input.val(newVal);
 
-        // --- BƯỚC 1: ĐỒNG BỘ SANG FORM ẨN ĐỂ LƯU DATABASE ---
-        const index = input.attr("data-cart-detail-index");
-        // Sử dụng attribute selector để tránh lỗi dấu chấm trong ID của Spring
-        $(`input[id="cartDetails${index}.quantity"]`).val(newVal);
+        //set form index
+        const index = input.attr("data-cart-detail-index")
+        const el = document.getElementById(`cartDetails${index}.quantity`);
+        $(el).val(newVal);
 
-
-        // --- BƯỚC 2: CẬP NHẬT HIỂN THỊ THÀNH TIỀN TỪNG SẢN PHẨM ---
-        const pricePerUnit = input.attr("data-cart-detail-price");
+        //get price
+        const price = input.attr("data-cart-detail-price");
         const id = input.attr("data-cart-detail-id");
-        const priceElement = $(`p[data-cart-detail-id='${id}']`);
 
-        if (priceElement.length > 0) {
-            const newPrice = parseFloat(pricePerUnit) * newVal;
-            priceElement.text(formatCurrency(newPrice) + " đ");
-            // Cập nhật luôn data attribute để hàm tính tổng dùng được số mới
-            priceElement.attr("data-cart-detail-subtotal", newPrice);
+        const priceElement = $(`p[data-cart-detail-id='${id}']`);
+        if (priceElement) {
+            const newPrice = +price * newVal;
+            priceElement.text(formatCurrency(newPrice.toFixed(2)) + " đ");
         }
 
-        // --- BƯỚC 3: CẬP NHẬT TỔNG TIỀN TOÀN GIỎ HÀNG ---
-        updateCartTotal();
+        //update total cart price
+        const totalPriceElement = $(`p[data-cart-total-price]`);
+
+        if (totalPriceElement && totalPriceElement.length) {
+            const currentTotal = totalPriceElement.first().attr("data-cart-total-price");
+            let newTotal = +currentTotal;
+            if (change === 0) {
+                newTotal = +currentTotal;
+            } else {
+                newTotal = change * (+price) + (+currentTotal);
+            }
+
+            //reset change
+            change = 0;
+
+            //update
+            totalPriceElement?.each(function (index, element) {
+                //update text
+                $(totalPriceElement[index]).text(formatCurrency(newTotal.toFixed(2)) + " đ");
+
+                //update data-attribute
+                $(totalPriceElement[index]).attr("data-cart-total-price", newTotal);
+            });
+        }
     });
-
-    function updateCartTotal() {
-        let total = 0;
-        // Quét tất cả các dòng sản phẩm
-        $('p[data-cart-detail-id]').each(function () {
-            // Lấy giá trị đã tính toán ở Bước 2
-            let subtotal = parseFloat($(this).attr("data-cart-detail-subtotal")) || 0;
-            total += subtotal;
-        });
-
-        let formattedTotal = formatCurrency(total) + " đ";
-
-        // Cập nhật vào tất cả các thẻ hiển thị tổng tiền (Subtotal, Total, v.v.)
-        $('#cart-subtotal, #cart-total, [data-cart-total-price]').text(formattedTotal);
-        // Nếu bạn dùng data-attribute để lưu tổng, hãy cập nhật nó
-        $('[data-cart-total-price]').attr("data-cart-total-price", total);
-    }
 
     $('#btnFilter').click(function (event) {
         event.preventDefault();

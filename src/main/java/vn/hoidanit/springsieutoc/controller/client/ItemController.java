@@ -2,7 +2,11 @@ package vn.hoidanit.springsieutoc.controller.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +34,30 @@ public class ItemController {
         this.productService = productService;
     }
 
+    @GetMapping("/products")
+    public String getProductsPage(Model model, @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            } else {
+
+            }
+        } catch (Exception e) {
+            page = 1;
+        }
+        if (page < 1) {
+            page = 1;
+        }
+        Pageable pageable = PageRequest.of(page - 1, 6);
+        Page<Product> products = this.productService.getAllProducts(pageable);
+        List<Product> listProducts = products.getContent();
+        model.addAttribute("products", listProducts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", products.getTotalPages());
+        return "client/product/show";
+    }
+
     @GetMapping("/product/{id}")
     public String getProductPage(Model model, @PathVariable long id) {
         Product product = this.productService.getProductById(id);
@@ -44,7 +72,7 @@ public class ItemController {
         long productId = id;
         String email = (String) session.getAttribute("email");
 
-        this.productService.handleAddProductToCard(email, productId, session);
+        this.productService.handleAddProductToCard(email, productId, session, 1);
 
         return "redirect:/";
     }
@@ -130,4 +158,15 @@ public class ItemController {
     public String getThankYouPage(Model model) {
         return "client/cart/thanks";
     }
+
+    @PostMapping("/add-product-from-view-detail")
+    public String postAddProductFromViewDetail(@RequestParam("id") long id, @RequestParam("quantity") long quantity,
+            HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String email = (String) session.getAttribute("email");
+
+        this.productService.handleAddProductToCard(email, id, session, quantity);
+        return "redirect:/product/" + id;
+    }
+
 }

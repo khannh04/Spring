@@ -3,6 +3,8 @@ package vn.hoidanit.springsieutoc.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.springsieutoc.domain.Order;
@@ -19,8 +21,8 @@ public class OrderService {
         this.orderDetailRepository = orderDetailRepository;
     }
 
-    public List<Order> getAllOrders() {
-        return this.orderRepository.findAll();
+    public Page<Order> getAllOrders(Pageable page) {
+        return this.orderRepository.findAll(page);
     }
 
     public Optional<Order> getOrderById(long id) {

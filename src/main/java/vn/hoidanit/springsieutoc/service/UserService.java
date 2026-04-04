@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import vn.hoidanit.springsieutoc.domain.Role;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.springsieutoc.domain.User;
@@ -28,8 +30,8 @@ public class UserService {
         this.productRepository = productRepository;
     }
 
-    public List<User> getAllUsers() {
-        return this.userRepository.findAll();
+    public Page<User> getAllUsers(Pageable page) {
+        return this.userRepository.findAll(page);
     }
 
     public List<User> getAllUsersByEmail(String email) {

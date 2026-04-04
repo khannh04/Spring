@@ -10,10 +10,10 @@
                     data-bs-target="#navbarCollapse">
                     <span class="fa fa-bars text-primary"></span>
                 </button>
-                <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
+                <div class="collapse navbar-collapse bg-white" id="#navbarCollapse">
                     <div class="navbar-nav mx-auto">
                         <a href="/" class="nav-item nav-link active">Home</a>
-                        <a href="shop.html" class="nav-item nav-link">Product</a>
+                        <a href="/products" class="nav-item nav-link">Product</a>
                     </div>
                     <div class="d-flex m-3 me-0">
                         <c:if test="${not empty pageContext.request.userPrincipal}">
