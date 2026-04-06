@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import vn.hoidanit.springsieutoc.repository.CartRepository;
 import vn.hoidanit.springsieutoc.repository.OrderDetailRepository;
 import vn.hoidanit.springsieutoc.repository.OrderRepository;
 import vn.hoidanit.springsieutoc.repository.ProductRepository;
+import vn.hoidanit.springsieutoc.service.specification.ProductSpecs;
 
 @Service
 public class ProductService {
@@ -43,6 +45,72 @@ public class ProductService {
 
     public Page<Product> getAllProducts(Pageable page) {
         return this.productRepository.findAll(page);
+    }
+
+    public Page<Product> getAllProductsWithSpec(Pageable page, String name) {
+        return this.productRepository.findAll(ProductSpecs.nameLike(name), page);
+    }
+
+    // public Page<Product> getAllProductsWithSpec(Pageable page, double min) {
+    // return this.productRepository.findAll(ProductSpecs.minPrice(min), page);
+    // }
+    // public Page<Product> getAllProductsWithSpec(Pageable page, double max) {
+    // return this.productRepository.findAll(ProductSpecs.maxPrice(max), page);
+    // }
+    // public Page<Product> getAllProductsWithSpec(Pageable page, List<String>
+    // factory) {
+    // return this.productRepository.findAll(ProductSpecs.factoryLike(factory),
+    // page);
+    // }
+    // public Page<Product> getAllProductsWithSpec(Pageable page, String price) {
+    // if (price.equals("10-15-million")) {
+    // double min = 10000000;
+    // double max = 15000000;
+    // return this.productRepository.findAll(ProductSpecs.matchPrice(min, max),
+    // page);
+    // } else if (price.equals("16-20-million")) {
+    // double min = 16000000;
+    // double max = 20000000;
+    // return this.productRepository.findAll(ProductSpecs.matchPrice(min, max),
+    // page);
+    // } else {
+    // return this.productRepository.findAll(page);
+    // }
+    // }
+    public Page<Product> getAllProductsWithSpec(Pageable page, List<String> price) {
+        Specification<Product> combinedSpec = (root, query, criteriaBuilder) -> criteriaBuilder.disjunction();
+        int count = 0;
+        for (String p : price) {
+            double min = 0;
+            double max = 0;
+
+            switch (p) {
+                case "10-15-million":
+                    min = 10000000;
+                    max = 15000000;
+                    count++;
+                    break;
+                case "16-20-million":
+                    min = 16000000;
+                    max = 20000000;
+                    count++;
+                    break;
+                case "21-30-million":
+                    min = 21000000;
+                    max = 30000000;
+                    count++;
+                    break;
+                // add more case if need
+            }
+            if (min != 0 && max != 0) {
+                Specification<Product> rangeSpec = ProductSpecs.matchPrice(min, max);
+                combinedSpec = combinedSpec.or(rangeSpec);
+            }
+        }
+        if (count == 0) {
+            return this.productRepository.findAll(page);
+        }
+        return this.productRepository.findAll(combinedSpec, page);
     }
 
     public Product getProductById(long id) {
