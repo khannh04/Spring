@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import vn.hoidanit.springsieutoc.domain.Cart;
 import vn.hoidanit.springsieutoc.domain.CartDetail;
 import vn.hoidanit.springsieutoc.domain.Product;
+import vn.hoidanit.springsieutoc.domain.Product_;
 import vn.hoidanit.springsieutoc.domain.User;
 import vn.hoidanit.springsieutoc.domain.dto.ProductCriteriaDTO;
 import vn.hoidanit.springsieutoc.service.ProductService;
@@ -52,35 +54,19 @@ public class ItemController {
         if (page < 1) {
             page = 1;
         }
-        Pageable pageable = PageRequest.of(page - 1, 60);
-        Page<Product> products = this.productService.getAllProducts(pageable);
-
-        // String name = nameOptional.isPresent() ? nameOptional.get() : "";
-        // Page<Product> products = this.productService.getAllProductsWithSpec(pageable,
-        // name);
-
-        // case 1
-        // double min = minOptional.isPresent() ? Double.parseDouble(minOptional.get())
-        // : 0;
-        // Page<Product> products = this.productService.getAllProductsWithSpec(pageable,
-        // min);
-        // case 2
-        // double max = maxOptional.isPresent() ? Double.parseDouble(maxOptional.get())
-        // : 0;
-        // Page<Product> products = this.productService.getAllProductsWithSpec(pageable,
-        // max);
-        // case 3
-        // List<String> factory = Arrays.asList(factoryOptional.get().split(","));
-        // Page<Product> products = this.productService.getAllProductsWithSpec(pageable,
-        // factory);
-        // case 5
-        // String price = priceOptional.isPresent() ? priceOptional.get() : "";
-        // Page<Product> products = this.productService.getAllProductsWithSpec(pageable,
-        // price);
-        // case 6
-        // List<String> price = Arrays.asList(priceOptional.get().split(","));
-        // Page<Product> products = this.productService.getAllProductsWithSpec(pageable,
-        // price);
+        // check sort price
+        Pageable pageable = PageRequest.of(page - 1, 30);
+        if (productCriteriaDTO.getSort() != null && productCriteriaDTO.getSort().isPresent()) {
+            String sort = productCriteriaDTO.getSort().get();
+            if (sort.equals("LOW_TO_HIGH")) {
+                pageable = PageRequest.of(page - 1, 30, Sort.by(Product_.PRICE).ascending());
+            } else if (sort.equals("HIGH_TO_LOW")) {
+                pageable = PageRequest.of(page - 1, 30, Sort.by(Product_.PRICE).descending());
+            } else {
+                pageable = PageRequest.of(page - 1, 30);
+            }
+        }
+        Page<Product> products = this.productService.getAllProductsWithSpec(pageable, productCriteriaDTO);
 
         List<Product> listProducts = products.getContent();
         model.addAttribute("products", listProducts);

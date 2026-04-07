@@ -16,6 +16,7 @@ import vn.hoidanit.springsieutoc.domain.Order;
 import vn.hoidanit.springsieutoc.domain.OrderDetail;
 import vn.hoidanit.springsieutoc.domain.Product;
 import vn.hoidanit.springsieutoc.domain.User;
+import vn.hoidanit.springsieutoc.domain.dto.ProductCriteriaDTO;
 import vn.hoidanit.springsieutoc.repository.CartDetailRepository;
 import vn.hoidanit.springsieutoc.repository.CartRepository;
 import vn.hoidanit.springsieutoc.repository.OrderDetailRepository;
@@ -47,8 +48,25 @@ public class ProductService {
         return this.productRepository.findAll(page);
     }
 
-    public Page<Product> getAllProductsWithSpec(Pageable page, String name) {
-        return this.productRepository.findAll(ProductSpecs.nameLike(name), page);
+    public Page<Product> getAllProductsWithSpec(Pageable page, ProductCriteriaDTO productCriteriaDTO) {
+        if (productCriteriaDTO.getFactory() == null && productCriteriaDTO.getTarget() == null
+                && productCriteriaDTO.getPrice() == null) {
+            return this.productRepository.findAll(page);
+        }
+        Specification<Product> combinedSpec = Specification.where(null);
+        if (productCriteriaDTO.getTarget() != null && productCriteriaDTO.getTarget().isPresent()) {
+            Specification<Product> currentSpecs = ProductSpecs.targetLike(productCriteriaDTO.getTarget().get());
+            combinedSpec = combinedSpec.and(currentSpecs);
+        }
+        if (productCriteriaDTO.getFactory() != null && productCriteriaDTO.getFactory().isPresent()) {
+            Specification<Product> currentSpecs = ProductSpecs.factoryLike(productCriteriaDTO.getFactory().get());
+            combinedSpec = combinedSpec.and(currentSpecs);
+        }
+        if (productCriteriaDTO.getPrice() != null && productCriteriaDTO.getPrice().isPresent()) {
+            Specification<Product> currentSpecs = this.builtPriceSpecification(productCriteriaDTO.getPrice().get());
+            combinedSpec = combinedSpec.and(currentSpecs);
+        }
+        return this.productRepository.findAll(combinedSpec, page);
     }
 
     // public Page<Product> getAllProductsWithSpec(Pageable page, double min) {
@@ -77,28 +95,28 @@ public class ProductService {
     // return this.productRepository.findAll(page);
     // }
     // }
-    public Page<Product> getAllProductsWithSpec(Pageable page, List<String> price) {
-        Specification<Product> combinedSpec = (root, query, criteriaBuilder) -> criteriaBuilder.disjunction();
-        int count = 0;
+    public Specification<Product> builtPriceSpecification(List<String> price) {
+        Specification<Product> combinedSpec = Specification.where(null);
         for (String p : price) {
             double min = 0;
             double max = 0;
 
             switch (p) {
-                case "10-15-million":
+                case "UNDER_10":
+                    min = 10;
+                    max = 10000000;
+                    break;
+                case "10-15":
                     min = 10000000;
                     max = 15000000;
-                    count++;
                     break;
-                case "16-20-million":
-                    min = 16000000;
+                case "15-20":
+                    min = 15000000;
                     max = 20000000;
-                    count++;
                     break;
-                case "21-30-million":
-                    min = 21000000;
-                    max = 30000000;
-                    count++;
+                case "OVER_20":
+                    min = 20000000;
+                    max = 90000000;
                     break;
                 // add more case if need
             }
@@ -107,10 +125,7 @@ public class ProductService {
                 combinedSpec = combinedSpec.or(rangeSpec);
             }
         }
-        if (count == 0) {
-            return this.productRepository.findAll(page);
-        }
-        return this.productRepository.findAll(combinedSpec, page);
+        return combinedSpec;
     }
 
     public Product getProductById(long id) {
